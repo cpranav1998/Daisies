@@ -7,13 +7,13 @@ def js_list(list_name: str, data: pd.DataFrame):
     """
     Python wrapper to generate a complete listjs list for displaying a pandas df.
     """
-    html_div = div(cls="container", id=list_name)
-    with html_div:
+    container = div(cls="container", id=list_name)
+    with container:
         br()
-        div(input(cls="search form-control", placeholder="Search"), cls="container")
+        search_div()
         br()
-        tbl = table(cls="table")
-        with tbl:
+        sort_table = table(cls="table")
+        with sort_table:
             make_table_header(data)
             tbody(cls="list")
 
@@ -27,7 +27,7 @@ def js_list(list_name: str, data: pd.DataFrame):
                 var values ={records};
                 var userList = new List('{list_name}', options, values);"""
 
-    return {"html": html_div.render(), "js": js_code}
+    return {"html": container.render(), "js": js_code}
 
 
 def make_table_header(data):
@@ -42,3 +42,6 @@ def make_options(fields, table_setup):
     vals = f"valueNames: {fields},\n"
     items = f"item: '<tr>{table_setup}</tr>'"
     return braces_wrap(vals + items)
+
+def search_div():
+    return div(input(cls="search form-control", placeholder="Search"), cls="container")
