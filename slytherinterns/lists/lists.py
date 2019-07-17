@@ -7,12 +7,18 @@ class CSS:
     def __init__(self, name: str):
         print(os.getcwd())
         with open("./lists/css/{filename}.json".format(filename=name)) as json_file:
-            self.styles = json.load(json_file)
+            stylesDict = json.load(json_file)
+            self.styles = stylesDict["style"]
+            self.fonts = stylesDict["fonts"]
 
     def __apply_add(self,class_name):
         return class_name + " { " + self.styles[class_name] + " }"
     def add_css(self):
-        return "\n".join(map(self.__apply_add,self.styles.keys()))
+        return "\n".join(map(self.__apply_add, self.styles.keys()))
+    def __apply_fonts(self, font_link):
+        return link(rel='stylesheet', href=font_link)
+    def add_fonts(self):
+        return [self.__apply_fonts(font) for font in self.fonts]
 
 class ListOptions:
     def __init__(self, style="test"):
@@ -24,8 +30,9 @@ def js_list(list_name: str, data: pd.DataFrame, options: ListOptions):
     """
     css = CSS(options.style)
     html_div = div(cls="container", id=list_name)
-    print(css.add_css())
+    print(css.add_fonts())
     with html_div:
+        css.add_fonts()
         style(css.add_css())
         div(input(cls="search form-control", placeholder="Search"), cls="container")
         br()

@@ -1,12 +1,15 @@
 {
-	"div.container": "background-color: black;",
-	"input.search": "color: green; background-color: orange;",
-	"tr.item": "color: green;",
-	"tbody.list": "background-color: lightblue;",
-	"th.sort": "background-color: red;",
-	"table.table": "border-style: solid; border-width: 5px;",
-	"th.asc": "background-color: purple",
-	"th.desc": "background-color: orange",
-	"td:hover": "background-color: yellow",
-	"tr.item:hover": "background-color: pink"
+	"fonts": ["https://fonts.googleapis.com/css?family=Work+Sans:400,500&display=swap"],
+	"style": {
+		"div.container": "background-color: blue;",
+		"input.search": "color: green; background-color: white;",
+		"tr.item": "color: green; font-family:'Work Sans'",
+		"tbody.list": "background-color: white;",
+		"th.sort": "background-color: red;",
+		"table.table": "border-style: solid; border-width: 5px;",
+		"th.asc": "background-color: red",
+		"th.desc": "background-color: blue",
+		"td:hover": "background-color: red",
+		"tr.item:hover": "background-color: blue"
+	}
 }
