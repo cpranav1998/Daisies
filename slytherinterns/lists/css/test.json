@@ -1,0 +1,12 @@
+{
+	"div.container": "background-color: black;",
+	"input.search": "color: green; background-color: orange;",
+	"tr.item": "color: green;",
+	"tbody.list": "background-color: lightblue;",
+	"th.sort": "background-color: red;",
+	"table.table": "border-style: solid; border-width: 5px;",
+	"th.asc": "background-color: purple",
+	"th.desc": "background-color: orange",
+	"td:hover": "background-color: yellow",
+	"tr.item:hover": "background-color: pink"
+}
