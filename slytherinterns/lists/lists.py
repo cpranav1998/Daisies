@@ -2,13 +2,24 @@ from dominate.tags import *
 import pandas as pd
 import json
 
-def js_list(list_name: str, data: pd.DataFrame):
+class CSS:
+    def __init__(self, name: str):
+        with open('./css/{name}.json') as json_file:
+            self.styles = json.load(json_file)
+
+    def add_css(self):
+        add = lambda class_name: class_name + " { " self.styles[class_name] + " } "
+        return "\n".join(map(lambda el: css.add(el),self.styles.keys()))
+
+
+def js_list(list_name: str, data: pd.DataFrame, options={}):
     """
     Python wrapper to generate a complete listjs list for displaying a pandas df.
     """
+    css = CSS(options.style)
     html_div = div(cls="container", id=list_name)
     with html_div:
-        br()
+        style(css.add_css())
         div(input(cls="search form-control", placeholder="Search"), cls="container")
         br()
         tbl = table(cls="table")
