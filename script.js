@@ -83,3 +83,45 @@ $(function(){
 		}
 	});
 });
+
+/* text parser should follow standard of `category inequality_operator value` */
+function textParser(filterString){
+  if (filterString.find('>')){
+    filter = filterString.split('>');
+    return [filter[0],'>',filter[1]];
+  }
+  if(filterString.find('<')){
+    filter = filterString.split('<');
+    return [filter[0],'<',filter[1]];
+  }
+  return filterString
+}
+
+
+function filterWithoutListJs() {
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('inputTag');
+  filterString = input.value.toUpperCase();
+  filterProps = textParser(filterString);
+  ul = document.getElementById("ulTag");
+  li = ul.getElementsByTagName('li');
+
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("elementTag")[0];
+    txtValue = a.textContent || a.innerText;
+    if(filterProps[1] == '>'){
+      if (txtValue.toUpperCase() > filter[2]) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+    else if(filterProps[1] == '<') {
+      if (txtValue.toUpperCase() < filter[2]) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+  }
+}
