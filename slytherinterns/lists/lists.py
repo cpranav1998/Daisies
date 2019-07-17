@@ -9,6 +9,7 @@ def js_list(list_name: str, data: pd.DataFrame):
 
     html_div = div(cls="container", id=list_name)
     with html_div:
+        br()
         div(input(cls="search form-control", placeholder="Search"), cls="container")
         br()
         tbl = table(cls="table")
