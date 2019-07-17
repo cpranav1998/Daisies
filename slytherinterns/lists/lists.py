@@ -8,8 +8,9 @@ class CSS:
             self.styles = json.load(json_file)
 
     def add_css(self):
-        add = lambda class_name: class_name + " { " self.styles[class_name] + " } "
-        return "\n".join(map(lambda el: add(el),self.styles.keys()))
+        def apply_add(class_name):
+            class_name + " { " self.styles[class_name] + " }"
+        return "\n".join(map(apply_add,self.styles.keys()))
 
 
 def js_list(list_name: str, data: pd.DataFrame, options={}):
