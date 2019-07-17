@@ -29,17 +29,19 @@ def js_list(list_name: str, data: pd.DataFrame, options={}):
 
     td_setup = "".join(td(cls=field).render() for field in data.columns)
 
-    options = """
+    table_options = """
             {{valueNames: {fields},
-            item: '<tr>{table_setup}</tr>'
+            item: '<tr class="item">{table_setup}</tr>'
             }}""".format(
         fields=str(list(data.columns)), table_setup=td_setup
     )
 
-    js_code = """var options ={td_setup};
-                var values ={records};
-                var userList = new List('{list_name}', options, values);""".format(
-        td_setup=options, records=str(data.to_dict("records")), list_name=list_name
+    js_code = """
+                let options ={td_setup};
+                let values ={records};
+                let userList = new List('{list_name}', options, values);
+            """.format(
+        td_setup=table_options, records=str(data.to_dict("records")), list_name=list_name
     )
 
     return {"html": html_div.render(), "js": js_code}
