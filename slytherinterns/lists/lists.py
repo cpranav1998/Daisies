@@ -2,6 +2,7 @@ from dominate.tags import *
 import pandas as pd
 import json
 import os
+
 class CSS:
     def __init__(self, name: str):
         print(os.getcwd())
@@ -34,34 +35,59 @@ def js_list(list_name: str, data: pd.DataFrame, options: ListOptions):
         with cont:
             i(cls="fas fa-search")
             input(cls="search form-control", placeholder="Search")
+
+
+
+def js_list(list_name: str, data: pd.DataFrame):
+    """
+    Python wrapper to generate a complete listjs list for displaying a pandas df.
+    """
+    container = div(cls="container", id=list_name)
+    with container:
+        br()
+        search_div()
         br()
         div(input(cls="form-control", placeholder="Filter", onkeyup="filterFunction()"), cls="container")
         br()
-        tbl = table(cls="table")
-        with tbl:
+        sort_table = table(cls="table")
+        with sort_table:
             make_table_header(data)
             tbody(cls="list")
     td_setup = "".join(td(cls=field).render() for field in data.columns)
-    table_options = """
-            {{valueNames: {fields},
-            item: '<tr class="item">{table_setup}</tr>'
-            }}""".format(
-        fields=str(list(data.columns)), table_setup=td_setup
-    )
 
-    js_code = """
-                var options ={td_setup};
-                var values ={records};
-                var userList = new List('{list_name}', options, values);
-                {text_parser}
-                {filter}
-;""".format(
-        td_setup=table_options, records=str(data.to_dict("records")), list_name=list_name,
-        text_parser=make_text_parser(), filter=make_filter()
-    )
-    return {"html": html_div.render(), "js": js_code}
+
+    options = make_options(fields=str(list(data.columns)), table_setup=td_setup)
+
+    records = str(data.to_dict("records"))
+
+    text_parser = make_text_parser()
+    text_filter = make_filter()
+    js_code = f"""var options ={td_setup};
+                  var values ={records};
+                  var userList = new List('{list_name}', options, values);
+                  {text_parser}
+                  {text_filter};"""
+
+    return {"html": container.render(), "js": js_code}
+
+
+
 def make_table_header(data):
     return thead().add(th(field, cls="sort", data_sort=field) for field in data.columns)
+
+
+def braces_wrap(base_string):
+    return "{" + base_string + "}"
+
+
+def make_options(fields, table_setup):
+    vals = f"valueNames: {fields},\n"
+    items = f"item: '<tr>{table_setup}</tr>'"
+    return braces_wrap(vals + items)
+
+def search_div():
+    return div(input(cls="search form-control", placeholder="Search"), cls="container")
+
 
 def make_text_parser():
     return """function textParser(filterString){
@@ -131,3 +157,4 @@ def make_filter():
             }
         }
     };"""
+

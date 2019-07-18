@@ -12,8 +12,6 @@ def ListView(request):
     df = pd.DataFrame(random_data, columns=['a', 'b'])
     list_js = js_list("test_list", df, ListOptions("styles"))
 
-    context = {
-        "list":list_js
-    }
+    context = {"list": list_js}
 
     return render(request, 'lists/list_test.html', context=context)
