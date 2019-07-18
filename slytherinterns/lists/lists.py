@@ -64,7 +64,6 @@ def make_filter():
         filter = input[1].value.toUpperCase();
         filterProps = textParser(filter);
         table = document.getElementsByTagName("table")[0];
-        console.log(table);
         tbody = table.getElementsByTagName("tbody");
         tr = tbody[0].getElementsByTagName("tr");
         if(filter == ''){
@@ -77,18 +76,38 @@ def make_filter():
                 filterCategory = tr[i].getElementsByClassName(filterProps[0].trim().toLowerCase())[0];
                 txtValue = filterCategory.textContent || filterCategory.innerText;
                 if(filterProps[1] == '>'){
-                	if (txtValue.toUpperCase() >= (filterProps[2].trim().toUpperCase())) {
-                    	tr[i].style.display = "";
-                	} else {
-                    	tr[i].style.display = "none";
-                	}
+                	parsedFloat = parseFloat(filterProps[2].trim());
+                    if(parsedFloat){
+                        if (parseFloat(txtValue) > parsedFloat) {
+                        	tr[i].style.display = "";
+                    	} else {
+                        	tr[i].style.display = "none";
+                    	}
+                    }
+                    else{
+                        if (txtValue.toUpperCase() > (filterProps[2].trim().toUpperCase())) {
+                        	tr[i].style.display = "";
+                    	} else {
+                        	tr[i].style.display = "none";
+                    	}
+                    }
                 }
                 else if(filterProps[1] == '<'){
-                	if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
-                    	tr[i].style.display = "";
-                	} else {
-                    	tr[i].style.display = "none";
-                	}
+                    parsedFloat = parseFloat(filterProps[2].trim());
+                    if(parsedFloat){
+                        if (parseFloat(txtValue) < parsedFloat) {
+                        	tr[i].style.display = "";
+                    	} else {
+                        	tr[i].style.display = "none";
+                    	}
+                    }
+                    else{
+                        if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
+                        	tr[i].style.display = "";
+                    	} else {
+                        	tr[i].style.display = "none";
+                    	}
+                    }
                 }
             }
         }
