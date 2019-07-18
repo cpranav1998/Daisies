@@ -85,9 +85,9 @@ def make_filter():
                 }
                 else if(filterProps[1] == '<'){
                 	if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
-                    	td[i].style.display = "";
+                    	tr[i].style.display = "";
                 	} else {
-                    	td[i].style.display = "none";
+                    	tr[i].style.display = "none";
                 	}
                 }
             }
