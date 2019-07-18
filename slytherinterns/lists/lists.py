@@ -35,7 +35,7 @@ def js_list(list_name: str, data: pd.DataFrame):
                 {filter}
 ;""".format(
         td_setup=options, records=str(data.to_dict("records")), list_name=list_name,
-        text_parser=make_text_parser(), filter=make_filter()
+        text_parser=make_text_parser(), filter=make_filter(), reset_filter=reset_list()
     )
 
     return {"html": html_div.render(), "js": js_code}
@@ -67,25 +67,30 @@ def make_filter():
         console.log(table);
         tbody = table.getElementsByTagName("tbody");
         tr = tbody[0].getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            console.log(tr[i]);
-            console.log(filterProps[0].trim());
-            filterCategory = tr[i].getElementsByClassName(filterProps[0].trim().toLowerCase())[0];
-            console.log(filterCategory);
-            txtValue = filterCategory.textContent || filterCategory.innerText;
-            if(filterProps[1] == '>'){
-            	if (txtValue.toUpperCase() >= (filterProps[2].trim().toUpperCase())) {
-                	tr[i].style.display = "";
-            	} else {
-                	tr[i].style.display = "none";
-            	}
+        if(filter == ''){
+            console.log("RESET");
+            for (i = 0; i < tr.length; i++){
+                tr[i].style.display = "";
             }
-            else if(filterProps[1] == '<'){
-            	if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
-                	td[i].style.display = "";
-            	} else {
-                	td[i].style.display = "none";
-            	}
+        }
+        else{
+            for (i = 0; i < tr.length; i++) {
+                filterCategory = tr[i].getElementsByClassName(filterProps[0].trim().toLowerCase())[0];
+                txtValue = filterCategory.textContent || filterCategory.innerText;
+                if(filterProps[1] == '>'){
+                	if (txtValue.toUpperCase() >= (filterProps[2].trim().toUpperCase())) {
+                    	tr[i].style.display = "";
+                	} else {
+                    	tr[i].style.display = "none";
+                	}
+                }
+                else if(filterProps[1] == '<'){
+                	if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
+                    	td[i].style.display = "";
+                	} else {
+                    	td[i].style.display = "none";
+                	}
+                }
             }
         }
     };"""
