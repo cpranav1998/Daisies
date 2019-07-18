@@ -11,7 +11,7 @@ def js_list(list_name: str, data: pd.DataFrame):
         br()
         div(input(cls="search form-control", placeholder="Search"), cls="container")
         br()
-        div(input(cls="form-control", placeholder="Filter", onkeyup="myFunction()"), cls="container")
+        div(input(cls="form-control", placeholder="Filter", onkeyup="filterFunction()"), cls="container")
         br()
         tbl = table(cls="table")
         with tbl:
@@ -35,7 +35,7 @@ def js_list(list_name: str, data: pd.DataFrame):
                 {filter}
 ;""".format(
         td_setup=options, records=str(data.to_dict("records")), list_name=list_name,
-        text_parser=make_text_parser(), filter=make_filter(), reset_filter=reset_list()
+        text_parser=make_text_parser(), filter=make_filter()
     )
 
     return {"html": html_div.render(), "js": js_code}
@@ -58,7 +58,7 @@ def make_text_parser():
     };"""
 
 def make_filter():
-    return """function myFunction() {
+    return """function filterFunction() {
         var input, filter, ul, li, a, i, txtValue;
         input = document.getElementsByTagName("input");
         filter = input[1].value.toUpperCase();
@@ -68,7 +68,6 @@ def make_filter():
         tbody = table.getElementsByTagName("tbody");
         tr = tbody[0].getElementsByTagName("tr");
         if(filter == ''){
-            console.log("RESET");
             for (i = 0; i < tr.length; i++){
                 tr[i].style.display = "";
             }
