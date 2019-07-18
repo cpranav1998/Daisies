@@ -69,7 +69,7 @@ def filter_div():
     cont = div(cls='container')
     with cont:
         i(cls="fas fa-search")
-        input(cls="form-control", placeholder="Filter", onkeyup="filterFunction()")
+        input(cls="input-bar form-control", placeholder="Filter", onkeyup="filterFunction()")
     return cont
 
 def make_table_header(data):
@@ -89,7 +89,7 @@ def search_div():
     cont = div(cls="container")
     with cont:
         i(cls="fas fa-search")
-        input(cls="form-control", placeholder="Search")
+        input(cls="input-bar search form-control", placeholder="Search")
 
     return cont
 
