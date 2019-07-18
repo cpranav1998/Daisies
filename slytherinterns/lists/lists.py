@@ -56,7 +56,7 @@ def js_list(list_name: str, data: pd.DataFrame, options: ListOptions):
                 {text_parser}
                 {filter}
 ;""".format(
-        td_setup=options, records=str(data.to_dict("records")), list_name=list_name,
+        td_setup=table_options, records=str(data.to_dict("records")), list_name=list_name,
         text_parser=make_text_parser(), filter=make_filter()
     )
     return {"html": html_div.render(), "js": js_code}
