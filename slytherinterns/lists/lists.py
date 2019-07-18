@@ -12,6 +12,8 @@ def js_list(list_name: str, data: pd.DataFrame):
         br()
         search_div()
         br()
+        div(input(cls="form-control", placeholder="Filter", onkeyup="myFunction()"), cls="container")
+        br()
         sort_table = table(cls="table")
         with sort_table:
             make_table_header(data)
@@ -23,9 +25,16 @@ def js_list(list_name: str, data: pd.DataFrame):
 
     records = str(data.to_dict("records"))
 
-    js_code = f"""var options ={options};
+    js_code = """
+                var options ={td_setup};
                 var values ={records};
-                var userList = new List('{list_name}', options, values);"""
+                var userList = new List('{list_name}', options, values);
+                {text_parser}
+                {filter};""".format(
+        td_setup=options, records=str(data.to_dict("records")), list_name=list_name,
+        text_parser=make_text_parser(), filter=make_filter()
+    )
+
 
     return {"html": container.render(), "js": js_code}
 
@@ -45,3 +54,51 @@ def make_options(fields, table_setup):
 
 def search_div():
     return div(input(cls="search form-control", placeholder="Search"), cls="container")
+
+
+def make_text_parser():
+    return """function textParser(filterString){
+        if (filterString.indexOf('>') != -1){
+            filter = filterString.split('>');
+            return [filter[0],'>',filter[1]];
+        }
+        if(filterString.indexOf('<') != -1){
+            filter = filterString.split('<');
+            return [filter[0],'<',filter[1]];
+        }
+        return filterString
+    };"""
+
+def make_filter():
+    return """function myFunction() {
+        var input, filter, ul, li, a, i, txtValue;
+        input = document.getElementsByTagName("input");
+        filter = input[1].value.toUpperCase();
+        filterProps = textParser(filter);
+        table = document.getElementsByTagName("table")[0];
+        console.log(table);
+        tbody = table.getElementsByTagName("tbody");
+        tr = tbody[0].getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            console.log(tr[i]);
+            console.log(filterProps[0].trim());
+            filterCategory = tr[i].getElementsByClassName(filterProps[0].trim().toLowerCase())[0];
+            console.log(filterCategory);
+            txtValue = filterCategory.textContent || filterCategory.innerText;
+            if(filterProps[1] == '>'){
+            	if (txtValue.toUpperCase() >= (filterProps[2].trim().toUpperCase())) {
+                	tr[i].style.display = "";
+            	} else {
+                	tr[i].style.display = "none";
+            	}
+            }
+            else if(filterProps[1] == '<'){
+            	if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
+                	td[i].style.display = "";
+            	} else {
+                	td[i].style.display = "none";
+            	}
+            }
+        }
+    };"""
+
