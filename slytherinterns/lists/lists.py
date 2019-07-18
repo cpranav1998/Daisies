@@ -12,7 +12,7 @@ def js_list(list_name: str, data: pd.DataFrame):
         br()
         search_div()
         br()
-        div(input(cls="form-control", placeholder="Filter", onkeyup="myFunction()"), cls="container")
+        div(input(cls="form-control", placeholder="Filter", onkeyup="filterFunction()"), cls="container")
         br()
         sort_table = table(cls="table")
         with sort_table:
@@ -70,7 +70,7 @@ def make_text_parser():
     };"""
 
 def make_filter():
-    return """function myFunction() {
+    return """function filterFunction() {
         var input, filter, ul, li, a, i, txtValue;
         input = document.getElementsByTagName("input");
         filter = input[1].value.toUpperCase();
@@ -79,25 +79,29 @@ def make_filter():
         console.log(table);
         tbody = table.getElementsByTagName("tbody");
         tr = tbody[0].getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            console.log(tr[i]);
-            console.log(filterProps[0].trim());
-            filterCategory = tr[i].getElementsByClassName(filterProps[0].trim().toLowerCase())[0];
-            console.log(filterCategory);
-            txtValue = filterCategory.textContent || filterCategory.innerText;
-            if(filterProps[1] == '>'){
-            	if (txtValue.toUpperCase() >= (filterProps[2].trim().toUpperCase())) {
-                	tr[i].style.display = "";
-            	} else {
-                	tr[i].style.display = "none";
-            	}
+        if(filter == ''){
+            for (i = 0; i < tr.length; i++){
+                tr[i].style.display = "";
             }
-            else if(filterProps[1] == '<'){
-            	if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
-                	td[i].style.display = "";
-            	} else {
-                	td[i].style.display = "none";
-            	}
+        }
+        else{
+            for (i = 0; i < tr.length; i++) {
+                filterCategory = tr[i].getElementsByClassName(filterProps[0].trim().toLowerCase())[0];
+                txtValue = filterCategory.textContent || filterCategory.innerText;
+                if(filterProps[1] == '>'){
+                	if (txtValue.toUpperCase() >= (filterProps[2].trim().toUpperCase())) {
+                    	tr[i].style.display = "";
+                	} else {
+                    	tr[i].style.display = "none";
+                	}
+                }
+                else if(filterProps[1] == '<'){
+                	if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
+                    	tr[i].style.display = "";
+                	} else {
+                    	tr[i].style.display = "none";
+                	}
+                }
             }
         }
     };"""
