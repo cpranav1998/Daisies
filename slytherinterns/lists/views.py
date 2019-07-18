@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .lists import js_list
+from .lists import js_list, ListOptions
 import pandas as pd
 import random
 
@@ -8,10 +8,10 @@ import random
 
 def ListView(request):
 
-    random_data = [[random.randint(1, 100), random.randint(1, 100)] for _ in range(10)]
-    df = pd.DataFrame(random_data, columns=["a", "b"])
-    list_js = js_list("test_list", df)
+    random_data = [[random.randint(1,100), random.randint(1,100)] for _ in range(10)]
+    df = pd.DataFrame(random_data, columns=['a', 'b'])
+    list_js = js_list("test_list", df, ListOptions("styles"))
 
     context = {"list": list_js}
 
-    return render(request, "lists/list_test.html", context=context)
+    return render(request, 'lists/list_test.html', context=context)

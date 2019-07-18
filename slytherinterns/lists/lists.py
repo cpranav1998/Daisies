@@ -1,6 +1,41 @@
 from dominate.tags import *
 import pandas as pd
 import json
+import os
+
+class CSS:
+    def __init__(self, name: str):
+        print(os.getcwd())
+        with open("./lists/css/{filename}.json".format(filename=name)) as json_file:
+            stylesDict = json.load(json_file)
+            self.styles = stylesDict["style"]
+            self.fonts = stylesDict["fonts"]
+    def __apply_add(self,class_name):
+        return class_name + " { " + self.styles[class_name] + " }"
+    def add_css(self):
+        return "\n".join(map(self.__apply_add, self.styles.keys()))
+    def __apply_fonts(self, font_link):
+        return link(rel='stylesheet', href=font_link)
+    def add_fonts(self):
+        return [self.__apply_fonts(font) for font in self.fonts]
+class ListOptions:
+    def __init__(self, style="test"):
+        self.style = style
+def js_list(list_name: str, data: pd.DataFrame, options: ListOptions):
+    """
+    Python wrapper to generate a complete listjs list for displaying a pandas df.
+    """
+    css = CSS(options.style)
+    html_div = div(cls="container", id=list_name)
+    print(css.add_fonts())
+    with html_div:
+        css.add_fonts()
+        style(css.add_css())
+        cont = div(cls='container')
+        with cont:
+            i(cls="fas fa-search")
+            input(cls="search form-control", placeholder="Search")
+
 
 
 def js_list(list_name: str, data: pd.DataFrame):
@@ -18,25 +53,23 @@ def js_list(list_name: str, data: pd.DataFrame):
         with sort_table:
             make_table_header(data)
             tbody(cls="list")
-
     td_setup = "".join(td(cls=field).render() for field in data.columns)
+
 
     options = make_options(fields=str(list(data.columns)), table_setup=td_setup)
 
     records = str(data.to_dict("records"))
 
-    js_code = """
-                var options ={td_setup};
-                var values ={records};
-                var userList = new List('{list_name}', options, values);
-                {text_parser}
-                {filter};""".format(
-        td_setup=options, records=str(data.to_dict("records")), list_name=list_name,
-        text_parser=make_text_parser(), filter=make_filter()
-    )
-
+    text_parser = make_text_parser()
+    text_filter = make_filter()
+    js_code = f"""var options ={td_setup};
+                  var values ={records};
+                  var userList = new List('{list_name}', options, values);
+                  {text_parser}
+                  {text_filter};"""
 
     return {"html": container.render(), "js": js_code}
+
 
 
 def make_table_header(data):
@@ -76,7 +109,6 @@ def make_filter():
         filter = input[1].value.toUpperCase();
         filterProps = textParser(filter);
         table = document.getElementsByTagName("table")[0];
-        console.log(table);
         tbody = table.getElementsByTagName("tbody");
         tr = tbody[0].getElementsByTagName("tr");
         if(filter == ''){
@@ -89,18 +121,38 @@ def make_filter():
                 filterCategory = tr[i].getElementsByClassName(filterProps[0].trim().toLowerCase())[0];
                 txtValue = filterCategory.textContent || filterCategory.innerText;
                 if(filterProps[1] == '>'){
-                	if (txtValue.toUpperCase() >= (filterProps[2].trim().toUpperCase())) {
-                    	tr[i].style.display = "";
-                	} else {
-                    	tr[i].style.display = "none";
-                	}
+                	parsedFloat = parseFloat(filterProps[2].trim());
+                    if(parsedFloat){
+                        if (parseFloat(txtValue) > parsedFloat) {
+                        	tr[i].style.display = "";
+                    	} else {
+                        	tr[i].style.display = "none";
+                    	}
+                    }
+                    else{
+                        if (txtValue.toUpperCase() > (filterProps[2].trim().toUpperCase())) {
+                        	tr[i].style.display = "";
+                    	} else {
+                        	tr[i].style.display = "none";
+                    	}
+                    }
                 }
                 else if(filterProps[1] == '<'){
-                	if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
-                    	tr[i].style.display = "";
-                	} else {
-                    	tr[i].style.display = "none";
-                	}
+                    parsedFloat = parseFloat(filterProps[2].trim());
+                    if(parsedFloat){
+                        if (parseFloat(txtValue) < parsedFloat) {
+                        	tr[i].style.display = "";
+                    	} else {
+                        	tr[i].style.display = "none";
+                    	}
+                    }
+                    else{
+                        if (txtValue.toUpperCase() < (filterProps[2].trim().toUpperCase())) {
+                        	tr[i].style.display = "";
+                    	} else {
+                        	tr[i].style.display = "none";
+                    	}
+                    }
                 }
             }
         }
