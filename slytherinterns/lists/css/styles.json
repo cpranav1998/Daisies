@@ -1,0 +1,17 @@
+{
+    "fonts": ["https://fonts.googleapis.com/css?family=Work+Sans:400,500&display=swap", "https://kit.fontawesome.com/b553fd9531.js"],
+    "style": {
+        "div.container": "background-color: white; padding:0px; ",
+        "input.search": "color: green; background-color: white; border-radius: 3px; padding-top: 1.60em; padding-bottom: 1.60em; padding-left: 2.6em; padding-right: 1em; border: 2px solid #DFE2E6; font-size: 1.15em;",
+        "tr.item": "color: #555555; font-size: 1em;",
+        "tbody.list": "background-color: white;",
+        "th.sort": "background-color: #fff; color: #555555; text-align: center; text-transform: capitalize; padding-top:1.25em; padding-bottom: 1.25em;",
+        "table.table": "border: 2px solid #f3f3f3;",
+        "tr.item:hover": "background-color:#E9F0EF;",
+        "input.search:focus": "box-shadow:none;",
+        "td": "border-bottom: 2px solid #f3f3f3; text-align: center;",
+        "tr.item td": "padding-top:1.25em; padding-bottom:1.25em;",
+        "i.fa-search": "position:absolute; padding: 1.5em;",
+        "i.fas": "color: #8B939B;"
+    }
+}
