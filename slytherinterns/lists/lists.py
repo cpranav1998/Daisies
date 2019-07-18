@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import os
 
+
 class CSS:
     def __init__(self, name: str):
         print(os.getcwd())
@@ -10,17 +11,25 @@ class CSS:
             stylesDict = json.load(json_file)
             self.styles = stylesDict["style"]
             self.fonts = stylesDict["fonts"]
-    def __apply_add(self,class_name):
+
+    def __apply_add(self, class_name):
         return class_name + " { " + self.styles[class_name] + " }"
+
     def add_css(self):
         return "\n".join(map(self.__apply_add, self.styles.keys()))
+
     def __apply_fonts(self, font_link):
-        return link(rel='stylesheet', href=font_link)
+        return link(rel="stylesheet", href=font_link)
+
     def add_fonts(self):
         return [self.__apply_fonts(font) for font in self.fonts]
+
+
 class ListOptions:
     def __init__(self, style="test"):
         self.style = style
+
+
 def js_list(list_name: str, data: pd.DataFrame, options: ListOptions):
     """
     Python wrapper to generate a complete listjs list for displaying a pandas df.
@@ -40,7 +49,6 @@ def js_list(list_name: str, data: pd.DataFrame, options: ListOptions):
         make_sort_table(data)
 
     td_setup = "".join(td(cls=field).render() for field in data.columns)
-
 
     options = make_options(fields=str(list(data.columns)), table_setup=td_setup)
 
@@ -66,11 +74,16 @@ def make_sort_table(data):
 
 
 def filter_div():
-    cont = div(cls='container')
+    cont = div(cls="container")
     with cont:
         i(cls="fas fa-search")
-        input(cls="input-bar form-control", placeholder="Filter", onkeyup="filterFunction()")
+        input(
+            cls="input-bar form-control",
+            placeholder="Filter",
+            onkeyup="filterFunction()",
+        )
     return cont
+
 
 def make_table_header(data):
     return thead().add(th(field, cls="sort", data_sort=field) for field in data.columns)
@@ -84,6 +97,7 @@ def make_options(fields, table_setup):
     vals = f"valueNames: {fields},\n"
     items = f"item: '<tr>{table_setup}</tr>'"
     return braces_wrap(vals + items)
+
 
 def search_div():
     cont = div(cls="container")
@@ -106,6 +120,7 @@ def make_text_parser():
         }
         return filterString
     };"""
+
 
 def make_filter():
     return """function filterFunction() {
@@ -162,4 +177,3 @@ def make_filter():
             }
         }
     };"""
-
