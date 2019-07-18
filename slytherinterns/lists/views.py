@@ -5,14 +5,13 @@ import random
 
 # Create your views here.
 
+
 def ListView(request):
 
-    random_data = [[random.randint(1,100), random.randint(1,100)] for _ in range(10)]
-    df = pd.DataFrame(random_data, columns=['a', 'b'])
+    random_data = [[random.randint(1, 100), random.randint(1, 100)] for _ in range(10)]
+    df = pd.DataFrame(random_data, columns=["a", "b"])
     list_js = js_list("test_list", df)
 
-    context = {
-        "list":list_js
-    }
+    context = {"list": list_js}
 
-    return render(request, 'lists/list_test.html', context=context)
+    return render(request, "lists/list_test.html", context=context)
