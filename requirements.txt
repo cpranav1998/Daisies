@@ -1,4 +1,4 @@
-certifi==2019.6.16
+certifi==2022.12.7
 Django==2.2.1
 dominate==2.3.5
 numpy==1.16.4
